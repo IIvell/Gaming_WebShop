@@ -1,5 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.asfsdafsfd
+# Create your views here
 
 
