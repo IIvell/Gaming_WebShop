@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home{% endblock %}</title>
+    <style>
+        h1 {
+            border-bottom: 2px solid #000; /* Crna linija ispod */
+            padding-bottom: 10px; /* Malo prostora između teksta i linije */
+        }
+    </style>
+</head>
+<body>
+    <h1>My site</h1>
+    <div id="content" name="content">
+        {% block content %}
+        <!-- sadržaj koji se menja u različitim template-ima -->
+        {% endblock %}
+    </div>
+</body>
+</html>
