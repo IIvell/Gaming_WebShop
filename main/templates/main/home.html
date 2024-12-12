@@ -7,7 +7,7 @@
     <div class="games-container">
         <ul>
             {% for i in i %}
-                <li>{{ i.igrica_naslov }}</li>
+                <li><a href="{% url 'main:index' i.id %}">{{ i.igrica_naslov }}</a></li>
             {% empty %}
                 <li>No games available at the moment.</li>
             {% endfor %}

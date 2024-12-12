@@ -2,5 +2,7 @@
 {% block title %}View list{% endblock %}
 
 {% block content %}
-    <h2>{{ls.igrica_naslov}}</h2>
+    <h2>{{ ls.igrica_naslov }}</h2>
+    <p>{{ ls.igrica_sadrzaj }}</p>
+    <p><strong>Objavljeno:</strong> {{ ls.igrica_vrijeme_objave }}</p>
 {% endblock %}
