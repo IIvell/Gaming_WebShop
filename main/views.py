@@ -2,14 +2,17 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView
+from .models import Igrica, Kupac
 
 ## Create your views here.
 
-def index(request):
-    return render (request, 'main/base.html', {})
+def index(request, id):
+    ls = Igrica.objects.get(id=id)
+    return render (request, 'main/list.html', {'ls':ls})
 
 def homepage(request):
-    return render(request, 'main/home.html', {})
+    i = Igrica.objects.all()
+    return render(request, 'main/home.html', {'i':i})
     # primjetiti korištenje HTML-a
 
 class CustomLoginView(LoginView):

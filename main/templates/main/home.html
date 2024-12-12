@@ -1,5 +1,16 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h2>Home Page</h2>
+    <h2>Home Page</h2>
+    <p>Welcome! Here are the available games:</p>
+
+    <div class="games-container">
+        <ul>
+            {% for i in i %}
+                <li>{{ i.igrica_naslov }}</li>
+            {% empty %}
+                <li>No games available at the moment.</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
