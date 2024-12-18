@@ -4,13 +4,7 @@
     <h2>Home Page</h2>
     <p>Welcome! Here are the available games:</p>
 
-    <div class="games-container">
-        <ul>
-            {% for i in i %}
-                <li><a href="{% url 'main:index' i.id %}">{{ i.igrica_naslov }}</a></li>
-            {% empty %}
-                <li>No games available at the moment.</li>
-            {% endfor %}
-        </ul>
+    <div>
+        <a href="{% url 'main:list' %}" class="btn btn-primary">View All Games</a>
     </div>
 {% endblock %}

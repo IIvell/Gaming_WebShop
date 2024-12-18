@@ -1,8 +1,44 @@
 {% extends 'main/base.html' %}
-{% block title %}View list{% endblock %}
+{% block title %}List of Games{% endblock %}
 
 {% block content %}
-    <h2>{{ ls.igrica_naslov }}</h2>
-    <p>{{ ls.igrica_sadrzaj }}</p>
-    <p><strong>Objavljeno:</strong> {{ ls.igrica_vrijeme_objave }}</p>
+    <h2>Game List</h2>
+
+    <form method="get">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ request.GET.name|default:'' }}">
+    
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" value="{{ request.GET.date|default:'' }}">
+    
+        <label for="order">Order by:</label>
+        <select id="order" name="order">
+            <option value="name_asc" {% if request.GET.order == "name_asc" %}selected{% endif %}>Name (A-Z)</option>
+            <option value="name_desc" {% if request.GET.order == "name_desc" %}selected{% endif %}>Name (Z-A)</option>
+            <option value="date_asc" {% if request.GET.order == "date_asc" %}selected{% endif %}>Date (Oldest)</option>
+            <option value="date_desc" {% if request.GET.order == "date_desc" %}selected{% endif %}>Date (Newest)</option>
+        </select>
+    
+        <button type="submit">Filter</button>
+        <a href="{% url 'main:list' %}">Clear Filters</a> <!-- Link to reset filters -->
+    </form>
+    
+
+    <hr>
+
+    <!-- Display Filtered Games -->
+    {% if igre %}
+        <ul>
+            {% for igrica in igre %}
+                <li>
+                    <strong>
+                        <a href="{% url 'main:detail' igrica.pk %}">{{ igrica.igrica_naslov }}</a>
+                    </strong>
+                - {{ igrica.igrica_vrijeme_objave }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No games found.</p>
+    {% endif %}
 {% endblock %}

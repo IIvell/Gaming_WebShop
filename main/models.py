@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Igrica(models.Model):
-    igrica_naslov = models.CharField(max_length=100)
+    igrica_naslov = models.CharField(max_length=255)
     igrica_sadrzaj = models.TextField()
-    igrica_vrijeme_objave = models.DateTimeField(null=True, blank=True)
+    igrica_vrijeme_objave = models.DateField()
 
     def __str__(self):
         return self.igrica_naslov

@@ -1,0 +1,11 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ igrica.igrica_naslov }}{% endblock %}
+
+{% block content %}
+    <h2>{{ igrica.igrica_naslov }}</h2>
+    <p><strong>Description:</strong> {{ igrica.igrica_sadrzaj }}</p>
+    <p><strong>Release Date:</strong> {{ igrica.igrica_vrijeme_objave }}</p>
+
+    <a href="{% url 'main:list' %}">Back to Game List</a>
+{% endblock %}
