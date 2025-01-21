@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class Igrica(models.Model):
     igrica_naslov = models.CharField(max_length=255)
     igrica_sadrzaj = models.TextField()
-    igrica_vrijeme_objave = models.DateField()
+    igrica_vrijeme_objave = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.igrica_naslov

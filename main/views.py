@@ -7,6 +7,15 @@ from .models import Igrica, Kupac
 from django.db.models import Q
 from django.db.models.functions import TruncDate
 from django.views.generic import DetailView
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Igrica
+from .serializers import IgricaSerializer
+from rest_framework import viewsets
+from rest_framework.permissions import BasePermission
+from django.contrib.auth.models import User
+from .serializers import UserSerializer
 
 ## Create your views here.
 
@@ -63,3 +72,70 @@ class IgricaDetailView(DetailView):
     model = Igrica
     template_name = 'main/igrica_detail.html'
     context_object_name = 'igrica'    
+
+class IgricaListAPIView(APIView):
+    def get(self, request):
+        igre = Igrica.objects.all()
+        serializer = IgricaSerializer(igre, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = IgricaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class IgricaViewSet(viewsets.ModelViewSet):
+    queryset = Igrica.objects.all()
+    serializer_class = IgricaSerializer
+
+class IsSuperUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_superuser
+    
+class UserListCreateView(APIView):
+
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserDetailView(APIView):
+
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        user = self.get_object(pk)
+        if not user:
+            return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        user = self.get_object(pk)
+        if not user:
+            return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        user = self.get_object(pk)
+        if not user:
+            return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+        user.delete()
+        return Response({'detail': 'User deleted.'}, status=status.HTTP_204_NO_CONTENT)
