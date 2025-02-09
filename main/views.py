@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView
 from django.views.generic import ListView
-from .models import Igrica, Kupac
+from django.utils import timezone
+from .models import Igrica, Review, Kupac
 from django.db.models import Q
 from django.db.models.functions import TruncDate
 from django.views.generic import DetailView
@@ -16,6 +17,9 @@ from rest_framework import viewsets
 from rest_framework.permissions import BasePermission
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 ## Create your views here.
 
@@ -68,10 +72,41 @@ class IgricaListView(ListView):
 
         return queryset
     
-class IgricaDetailView(DetailView):
-    model = Igrica
-    template_name = 'main/igrica_detail.html'
-    context_object_name = 'igrica'    
+class IgricaDetailView(View):
+    def get(self, request, pk):
+        igrica = get_object_or_404(Igrica, pk=pk)
+        reviews = igrica.reviews.all()
+        return render(request, 'main/igrica_detail.html', {'igrica': igrica})
+
+    @method_decorator(login_required)
+    def post(self, request, pk):
+        igrica = get_object_or_404(Igrica, pk=pk)
+        review_text = request.POST.get('review_text')
+        rating = request.POST.get('rating')
+
+        if review_text and rating:
+            # Save the review with the currently logged-in user
+            review = Review.objects.create(
+                igrica=igrica,
+                user=request.user,
+                review_text=review_text,
+                rating=int(rating),
+                created_at=timezone.now()
+            )
+
+            # Update review count and total rating
+            igrica.review_count += 1
+            igrica.rating += int(rating)
+            igrica.save()
+
+            # Optionally, you can recalculate the average rating here, if needed
+            # Calculate the average rating from the total sum of ratings
+            igrica.average_rating = igrica.rating / igrica.review_count
+            igrica.save()
+
+        return redirect('main:detail', pk=pk)
+
+
 
 class IgricaListAPIView(APIView):
     def get(self, request):

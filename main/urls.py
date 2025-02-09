@@ -20,7 +20,7 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('igre/', IgricaListView.as_view(), name='list'),
-    path('igre/<int:pk>/', IgricaDetailView.as_view(), name='detail'), 
+    path('igre/<int:pk>/', IgricaDetailView.as_view(), name='detail'),
     path('api/igre/', IgricaListAPIView.as_view(), name='api-igre'),
     path('', include(router.urls)),
     path('api/users/', UserListCreateView.as_view(), name='user-list-create'),

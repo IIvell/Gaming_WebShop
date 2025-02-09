@@ -34,7 +34,10 @@
                     <strong>
                         <a href="{% url 'main:detail' igrica.pk %}">{{ igrica.igrica_naslov }}</a>
                     </strong>
-                - {{ igrica.igrica_vrijeme_objave }}
+                    - {{ igrica.igrica_vrijeme_objave }}
+                    <br>
+                    <span>Rating: {{ igrica.average_rating|default:"N/A" }} / 5</span>
+                    <span>({{ igrica.review_count|default:0 }} reviews)</span>
                 </li>
             {% endfor %}
         </ul>
