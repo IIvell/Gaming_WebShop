@@ -1,6 +1,36 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+    <style>
+        body {
+            background-color: #121212; /* Tamna pozadina */
+            color: #ffffff; /* Bela boja teksta */
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            color: #f1c40f; /* Zlatna boja naslova */
+        }
+
+        p {
+            color: #cccccc; /* Svetlo siva boja teksta */
+        }
+
+        .btn-primary {
+            background-color: #1e88e5; /* Plava boja dugmeta */
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: #1565c0;
+        }
+    </style>
+
     <h2>Home Page</h2>
     <p>Welcome! Here are the available games:</p>
 
