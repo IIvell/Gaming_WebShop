@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -9,7 +9,7 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']  # Dodajte polja koja želite
+        fields = ['username', 'email', 'password1', 'password2']
 
     # Validacija za korisničko ime
     def clean_username(self):
@@ -21,4 +21,4 @@ class RegisterForm(UserCreationForm):
     # Email može biti dupliran, ali korisničko ime ne
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        return email  # Ne proveravajte duplikate za email
+        return email

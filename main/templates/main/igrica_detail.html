@@ -6,41 +6,116 @@
 
 <style>
     body {
-        background-color: #121212; /* Tamna pozadina */
-        color: #ffffff; /* Bela boja teksta */
+        background-color: #121212; /* Dark background */
+        color: #ffffff; /* White text */
         font-family: Arial, sans-serif;
+        background-image: url('https://gmedia.playstation.com/is/image/SIEPDC/PS30TH_16x9_WALLPAPER-DARK?$1600px$');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .content-box {
+        background-color: rgba(0, 0, 0, 0.85); /* Semi-transparent black */
+        padding: 40px;
+        border-radius: 10px;
+        max-width: 800px;
+        margin: 50px auto 50px 50px; /* Shifted right */
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
     }
 
     h2 {
-        color: #f1c40f; /* Zlatna boja naslova */
+        color: #f1c40f; /* Gold */
+        font-size: 28px;
+    }
+
+    h3 {
+        color: #ff5733; /* Orange-red */
+        font-size: 22px;
+        margin-top: 20px;
     }
 
     p {
-        color: #cccccc; /* Svetlo siva boja teksta */
+        color: #cccccc; /* Light gray */
+        font-size: 18px;
+    }
+
+    strong {
+        color: #1e88e5; /* Bright blue */
     }
 
     a {
-    color: #1e88e5; /* Plava */
-    text-decoration: none;
-    font-weight: bold;
-}
+        color: #1e88e5; /* Blue */
+        text-decoration: none;
+        font-weight: bold;
+    }
 
     a:hover {
-    color: #1565c0; /* Tamnija plava za hover efekat */
-    text-decoration: underline;
-}
+        color: #1565c0; /* Darker blue */
+        text-decoration: underline;
+    }
 
+    textarea, select, button {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    button {
+        background-color: #f1c40f; /* Gold */
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+    }
+
+    button:hover {
+        background-color: #e6c200;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        background-color: #222; /* Slightly lighter black */
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    .rating {
+        font-size: 20px;
+        font-weight: bold;
+        color: #f39c12; /* Yellow-orange */
+    }
 </style>
 
+<div class="content-box">
     <h2>{{ igrica.igrica_naslov }}</h2>
+
+    <p class="rating">
+        <strong>Average Rating:</strong> {{ igrica.average_rating|floatformat:1 }}/5 
+        ({{ igrica.review_count }} reviews)
+    </p>
+
     <p><strong>Release Date:</strong> {{ igrica.igrica_vrijeme_objave }}</p>
-    <p><strong>Average Rating:</strong> {{ igrica.average_rating|floatformat:1 }}/5 ({{ igrica.review_count }} reviews)</p>
+
+    <h3>Description</h3>
+    <p>{{ igrica.igrica_sadrzaj }}</p>
 
     <h3>Reviews</h3>
     <ul>
         {% for review in igrica.reviews.all %}
             <li>
-                <strong>{{ review.user.username }}</strong> wrote: {{ review.review_text }} - <strong>{{ review.rating }}/5</strong>
+                <strong>{{ review.user.username }}</strong> wrote: 
+                <span style="color: #ffcc00;">{{ review.review_text }}</span> - 
+                <strong style="color: #ff5733;">{{ review.rating }}/5</strong>
             </li>
         {% empty %}
             <p>No reviews yet.</p>
@@ -48,28 +123,30 @@
     </ul>
 
     {% if user.is_authenticated %}
-    <h3>Add a Review</h3>
-    <form method="post">
-        {% csrf_token %}
-        <label for="review_text">Review:</label>
-        <textarea id="review_text" name="review_text" required></textarea>
+        <h3>Add a Review</h3>
+        <form method="post">
+            {% csrf_token %}
+            <label for="review_text">Review:</label>
+            <br>
+            <textarea id="review_text" name="review_text" required></textarea>
+            <br>
+            <br>
+            <label for="rating">Rating:</label>
+            <br>
+            <select id="rating" name="rating" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <br>
 
-        <label for="rating">Rating:</label>
-        <select id="rating" name="rating" required>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-
-        <button type="submit">Submit Review</button>
-    </form>
-{% else %}
-    <p>You need to <a href="{% url 'main:login' %}">log in</a> to add a review.</p>
-{% endif %}
-
-    <h3>Description</h3>
-        <p>{{ igrica.igrica_sadrzaj }}</p>
+            <button type="submit">Submit Review</button>
+        </form>
+    {% else %}
+        <p>You need to <a href="{% url 'main:login' %}">log in</a> to add a review.</p>
+    {% endif %}
+</div>
 
 {% endblock %}

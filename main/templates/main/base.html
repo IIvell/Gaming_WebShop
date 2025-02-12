@@ -12,7 +12,7 @@
         }
 
         header {
-            background-color: yellow; /* Žuta boja */
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
             padding: 20px;
             text-align: center;
             position: relative;
@@ -20,31 +20,64 @@
 
         h1 {
             margin: 0;
-            padding-bottom: 10px; /* Malo prostora između teksta i linije */
-            color: #000;
-            cursor: pointer; /* Pokazivač se menja u ruku kad se pređe mišem */
+            padding-bottom: 12px;
+            color: #FFD700; /* Gold color */
+            cursor: pointer;
         }
 
         h3 {
-            
-            border-bottom: 2px solid gray; /* Crna linija ispod */
+            border-bottom: 2px solid gray;
         }
 
-        #back-button {
+        h4 {
+            margin: 0;
+            padding-bottom: 1px;
+            color: #ffffff; /* White text */
+        }
+
+        #sign-in-button {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: black;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        border: 2px solid white;
+        }
+
+        #sign-in-button:hover {
+            background-color: gray;
+        }
+
+        #loggedin {
             position: absolute;
-            left: 20px;
-            top: 50%;
+            right: 20px;
+            top: 10%;
             transform: translateY(-50%);
-            background-color: black;
             color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
         }
 
-        #back-button:hover {
+        #sign-out-button {
+        position: absolute;
+        right: 20px;
+        top: 60%;
+        transform: translateY(-50%);
+        background-color: black;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        border: 2px solid white;
+        }
+
+        #sign-out-button:hover {
             background-color: gray;
         }
 
@@ -56,13 +89,22 @@
 <body>
 
     <header>
-        <button id="back-button" onclick="goBack()">⟵ Natrag</button>
-        <h1 onclick="goHome()">Respawn Gaming</h1>
+        <h1 onclick="goHome()">RESPAWN Gaming</h1>
+        <h4>Gamers don't die, they RESPAWN</h4>
+
+        {% if user.is_authenticated %}
+            <p id="loggedin">Welcome, {{ user.username }}!</p>
+            <form action="{% url 'main:logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" id="sign-out-button">Sign out</button>
+            </form>
+        {% else %}
+            <a href="{% url 'main:login' %}" id="sign-in-button">Sign in</a>
+        {% endif %}
     </header>
 
     <div id="content" name="content">
         {% block content %}
-        <!-- sadržaj koji se menja u različitim template-ima -->
         {% endblock %}
     </div>
 
@@ -72,7 +114,7 @@
         }
 
         function goHome() {
-            window.location.href = "/"; // Promeni ako je početna stranica drugačija
+            window.location.href = "/"; 
         }
     </script>
 

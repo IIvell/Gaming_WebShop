@@ -20,6 +20,9 @@ from .serializers import UserSerializer
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.shortcuts import redirect
+from django.contrib.auth import logout
+
 
 ## Create your views here.
 
@@ -31,6 +34,10 @@ def homepage(request):
     i = Igrica.objects.all()
     return render(request, 'main/home.html', {'i':i})
     # primjetiti korištenje HTML-a
+
+def custom_logout(request):
+    logout(request)
+    return redirect('homepage')     
 
 class CustomLoginView(LoginView):
     def form_valid(self, form):
@@ -105,8 +112,6 @@ class IgricaDetailView(View):
             igrica.save()
 
         return redirect('main:detail', pk=pk)
-
-
 
 class IgricaListAPIView(APIView):
     def get(self, request):

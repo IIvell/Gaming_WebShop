@@ -5,41 +5,121 @@
    
 <style>
     body {
-        background-color: #121212; /* Tamna pozadina */
-        color: #ffffff; /* Bela boja teksta */
+        background-color: #121212; /* Dark background */
+        color: #ffffff; /* White text */
         font-family: Arial, sans-serif;
+        background-image: url('https://wallpaper.forfun.com/fetch/7b/7b83a0b374d7fc38cdc9d55b79298bca.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .content-box {
+        background-color: #000; /* Solid black */
+        padding: 40px;
+        border-radius: 10px;
+        text-align: center;
+        max-width: 900px; /* Bigger box */
+        margin: 50px auto; /* Center the box */
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+    }
+
+    h1 {
+        font-size: 36px;
+        font-weight: bold;
+        background-image: linear-gradient(90deg, rgb(194, 1, 120), red, orange, yellow, green, cyan, blue, violet, rgb(194, 1, 120));
+        background-size: 400%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: rainbow 50s linear infinite;
+    }
+
+    @keyframes rainbow {
+        0% { background-position: 0%; }
+        100% { background-position: 400%; }
     }
 
     h2 {
-        color: #f1c40f; /* Zlatna boja naslova */
+        color: #f1c40f; /* Gold title */
+        font-size: 30px;
     }
 
     p {
-        color: #cccccc; /* Svetlo siva boja teksta */
+        color: #cccccc; /* Light gray text */
+        font-size: 18px;
     }
 
     a {
-    color: #1e88e5; /* Plava */
-    text-decoration: none;
-    font-weight: bold;
-}
+        color: #1e88e5; /* Blue */
+        text-decoration: none;
+        font-weight: bold;
+    }
 
     a:hover {
-    color: #1565c0; /* Tamnija plava za hover efekat */
-    text-decoration: underline;
-}
+        color: #1565c0; /* Darker blue on hover */
+        text-decoration: underline;
+    }
+
+    form {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+    input, select, button {
+        margin: 5px;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        font-size: 14px;
+    }
+
+    button {
+        background-color: #f1c40f; /* Gold button */
+        color: black;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background-color: #e6c200;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        background-color: #222; /* Slightly lighter black */
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    span {
+        display: block;
+        font-size: 14px;
+        color: #bbb;
+    }
 
 </style>
 
-    <h2>Game List</h2>
-
+<div class="content-box">
+    <h2>Game List</h2> 
+    
     <form method="get">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="{{ request.GET.name|default:'' }}">
-    
+
         <label for="date">Date:</label>
         <input type="date" id="date" name="date" value="{{ request.GET.date|default:'' }}">
-    
+
         <label for="order">Order by:</label>
         <select id="order" name="order">
             <option value="name_asc" {% if request.GET.order == "name_asc" %}selected{% endif %}>Name (A-Z)</option>
@@ -47,15 +127,13 @@
             <option value="date_asc" {% if request.GET.order == "date_asc" %}selected{% endif %}>Date (Oldest)</option>
             <option value="date_desc" {% if request.GET.order == "date_desc" %}selected{% endif %}>Date (Newest)</option>
         </select>
-    
+
         <button type="submit">Filter</button>
-        <a href="{% url 'main:list' %}">Clear Filters</a> <!-- Link to reset filters -->
+        <a href="{% url 'main:list' %}">Clear Filters</a>
     </form>
-    
 
     <hr>
 
-    <!-- Display Filtered Games -->
     {% if igre %}
         <ul>
             {% for igrica in igre %}
@@ -65,7 +143,7 @@
                     </strong>
                     - {{ igrica.igrica_vrijeme_objave }}
                     <br>
-                    <span>Rating: {{ igrica.average_rating|default:"N/A" }} / 5</span>
+                    <span>Rating: {{ igrica.average_rating|floatformat:1|default:"N/A" }} / 5</span>
                     <span>({{ igrica.review_count|default:0 }} reviews)</span>
                 </li>
             {% endfor %}
@@ -73,4 +151,5 @@
     {% else %}
         <p>No games found.</p>
     {% endif %}
+</div>
 {% endblock %}

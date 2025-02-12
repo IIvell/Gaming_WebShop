@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import login
 from .forms import RegisterForm
 
 def register(request):
@@ -6,8 +7,13 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             # Ako je forma validna, sačuvaj novog korisnika
-            form.save()
-            return redirect('/')  # Preusmeri korisnika na početnu stranicu
+            user = form.save()
+            
+            # Automatically log in the user after registration
+            login(request, user)
+            
+            # Preusmeri korisnika na početnu stranicu
+            return redirect('/')  # Redirect to the home page
     else:
         form = RegisterForm()
     

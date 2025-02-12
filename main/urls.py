@@ -18,7 +18,7 @@ urlpatterns = [
     path('<int:id>', views.index, name='index'),
     path('', views.homepage, name='homepage'),
     path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'), 
     path('igre/', IgricaListView.as_view(), name='list'),
     path('igre/<int:pk>/', IgricaDetailView.as_view(), name='detail'),
     path('api/igre/', IgricaListAPIView.as_view(), name='api-igre'),

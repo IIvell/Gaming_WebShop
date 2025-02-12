@@ -3,38 +3,73 @@
 {% block content %}
     <style>
         body {
-            background-color: #121212; /* Tamna pozadina */
-            color: #ffffff; /* Bela boja teksta */
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* White text */
             font-family: Arial, sans-serif;
+            background-image: url('https://partners.playstation.net/public/ps-background-a8772e473e79151e46a7..webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .content-box {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 600px;
+            margin: 50px auto; /* Center the box */
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
         }
 
         h2 {
-            color: #f1c40f; /* Zlatna boja naslova */
+            color: #f1c40f; /* Gold title */
         }
 
         p {
-            color: #cccccc; /* Svetlo siva boja teksta */
+            color: #cccccc; /* Light gray text */
+            font-size: 18px; /* Bigger font size */
         }
 
-        .btn-primary {
-            background-color: #1e88e5; /* Plava boja dugmeta */
-            color: white;
-            padding: 10px 15px;
+        .btn {
+            padding: 12px 20px;
             text-decoration: none;
             border-radius: 5px;
             display: inline-block;
-            margin-top: 10px;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
         }
 
-        .btn-primary:hover {
+        .btn-games {
+            background-color: #FFD700; /* Gold color, same as <h1> */
+            color: black;
+            border: none;
+        }
+
+        .btn-games:hover {
+            background-color: #e6c200;
+        }
+
+        .btn-forum {
+            background-color: #1e88e5; /* Blue button */
+            color: white;
+            border: none;
+        }
+
+        .btn-forum:hover {
             background-color: #1565c0;
         }
     </style>
 
-    <h2>Home Page</h2>
-    <p>Welcome! Here are the available games:</p>
-
-    <div>
-        <a href="{% url 'main:list' %}" class="btn btn-primary">View All Games</a>
+    <div class="content-box">
+        <h2>Welcome to RESPAWN Gaming!</h2>
+        <p>Join the discussion, explore new games, and connect with fellow gamers.</p>
+        <hr>
+        <p>Everything about gaming! This is a great spot to make suggestions, answer questions, find polls, and more!</p>
+        <a href="#" class="btn btn-forum">Visit Forum</a>
+        <hr>
+        <p>A place where gaming starts! Find new and popular games of every genre cause gaming is for everyone!</p>
+        <a href="{% url 'main:list' %}" class="btn btn-games">View All Games</a>
     </div>
 {% endblock %}

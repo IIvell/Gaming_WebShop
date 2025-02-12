@@ -7,10 +7,90 @@ Login Here
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <form method="post" class="form-group">
-        {% csrf_token %}
-        {{form|crispy}}
+    <style>
+        body {
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* White text */
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding-top: 50px;
+        }
+
+        h2 {
+            color: #f1c40f; /* Golden title */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #cccccc; /* Light grey text */
+            text-align: center;
+        }
+
+        .form-group {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .btn-primary {
+            background-color: #1e88e5; /* Blue button */
+            color: white;
+            padding: 12px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            width: 100%;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        .btn-primary:hover {
+            background-color: #1565c0;
+        }
+
+        a {
+            color: #f1c40f;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .alert-danger {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+
+    <div class="container">
+        <h2>Login</h2>
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            {{ form|crispy }}
+            
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        
         <p>Don't have an account? Create one <a href="/register">here</a></p>
-        <button type="submit" class="btn btn-succes">Login</button>
-    </form>
+    </div>
 {% endblock %}
