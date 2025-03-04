@@ -5,6 +5,16 @@
 
 <style>
 
+body {
+        background-color: #121212; /* Dark background */
+        color: #ffffff; /* White text */
+        font-family: Arial, sans-serif;
+        background-image: url('https://wallpaper.forfun.com/fetch/7b/7b83a0b374d7fc38cdc9d55b79298bca.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
 h1 {
         font-size: 36px;
         font-weight: bold;
@@ -44,42 +54,37 @@ h2 {
 }
 
 #search-results {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
 }
 
 .game {
-    width: 200px;
     text-align: center;
-    margin: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
 }
 
 .game img {
     width: 100%;
     height: auto;
     margin-bottom: 10px;
+    border-radius: 5px;
 }
 
-.game-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.game-container .game {
-    width: 180px;
-    text-align: center;
-}
-
-.game-container .game img {
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
-
-
+.content-box {
+        background-color: #000; /* Solid black */
+        padding: 40px;
+        border-radius: 10px;
+        text-align: center;
+        max-width: 900px; /* Bigger box */
+        margin: 50px auto; /* Center the box */
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+    }
 
 </style>
 
