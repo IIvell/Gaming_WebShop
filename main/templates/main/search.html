@@ -1,0 +1,121 @@
+{% extends 'main/base.html' %}
+{% block title %}List of Games{% endblock %}
+
+{% block content %}
+
+<style>
+
+h1 {
+        font-size: 36px;
+        font-weight: bold;
+        background-image: linear-gradient(90deg, rgb(194, 1, 120), red, orange, yellow, green, cyan, blue, violet, rgb(194, 1, 120));
+        background-size: 400%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: rainbow 50s linear infinite;
+    }
+
+    @keyframes rainbow {
+        0% { background-position: 0%; }
+        100% { background-position: 400%; }
+    }
+
+h2 {
+    color: #f1c40f; /* Gold title */
+    font-size: 30px;
+    text-align: center; /* Centriranje teksta */
+}
+
+#search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto; /* Centriranje forme na stranici */
+    max-width: 600px;  /* Opcionalno, možeš postaviti maksimalnu širinu */
+}
+
+#search-form input {
+    padding: 10px;
+    font-size: 16px;
+    width: 80%;  /* Možeš podesiti širinu prema potrebi */
+    margin-right: 10px; /* Razmak između inputa i dugmeta */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#search-results {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.game {
+    width: 200px;
+    text-align: center;
+    margin: 10px;
+}
+
+.game img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.game-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.game-container .game {
+    width: 180px;
+    text-align: center;
+}
+
+.game-container .game img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+
+
+</style>
+
+<div class="content-box">
+    <h2>Search Results</h2>
+
+    <!-- Forma za pretragu (ostaje na istoj stranici) -->
+    <form method="get" action="{% url 'main:search_games' %}" id="search-form">
+        <label for="search_name">Search Game:</label>
+        <input type="text" id="search_name" name="name" value="{{ request.GET.name|default:'' }}" placeholder="Enter game name" required>
+        
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Div za prikaz rezultata pretrage -->
+    <div id="search-results">
+        {% if search_results %}
+            {% for game in search_results %}
+            {% if game.pk %}
+                <div class="game">
+                    <!-- Slika sada vodi na URL detalja igre -->
+                    <a href="{% url 'main:detail' game.pk %}">
+                        <img src="{{ game.cover.url }}" alt="{{ game.name }}"> <!-- Slika iznad imena -->
+                    </a>
+                    <strong><a href="{% url 'main:detail' game.pk %}">{{ game.name }}</a></strong>
+                </div>
+            {% else %}
+                <li>No PK available for {{ game.name }}</li>
+            {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    </div>
+
+    <hr>
+</div>
+
+{% endblock %}

@@ -108,17 +108,29 @@
         color: #bbb;
     }
 
+    .game-cover {
+    max-width: 100px; /* Maksimalna širina slike */
+    max-height: 150px; /* Maksimalna visina slike */
+    object-fit: cover; /* Povećava sliku da pokrije cijeli prostor, čuvajući proporcije */
+    
+}
+
+
 </style>
 
 <div class="content-box">
     <h2>Game List</h2> 
-    
-    <form method="get">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="{{ request.GET.name|default:'' }}">
 
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" value="{{ request.GET.date|default:'' }}">
+ <!-- Forma za pretragu igara (ide na /search/) -->
+    <form id = "search-form "method="get" action="{% url 'main:search_games' %}" onsubmit="cleanSearch(event)">
+        <label for="search_name">Search Game:</label>
+        <input type="text" id="search_name" name="name" placeholder="Enter game name" required>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Forma za filtriranje igara (ide na /igre/) -->
+    <form method="get">
 
         <label for="order">Order by:</label>
         <select id="order" name="order">
@@ -132,24 +144,81 @@
         <a href="{% url 'main:list' %}">Clear Filters</a>
     </form>
 
+    <!-- Div za prikaz rezultata filtriranja -->
+    <div id="search-results">
+        {% if search_results %}
+            {% for game in search_results %}
+                <div class="game">
+                    <h3>{{ game.name }}</h3>
+                    <p>Rating: {{ game.rating }}</p>
+                    <p>Release Date: {{ game.first_release_date|date:"F j, Y" }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
     <hr>
 
     {% if igre %}
-        <ul>
-            {% for igrica in igre %}
-                <li>
-                    <strong>
-                        <a href="{% url 'main:detail' igrica.pk %}">{{ igrica.igrica_naslov }}</a>
-                    </strong>
-                    - {{ igrica.igrica_vrijeme_objave }}
-                    <br>
-                    <span>Rating: {{ igrica.average_rating|floatformat:1|default:"N/A" }} / 5</span>
-                    <span>({{ igrica.review_count|default:0 }} reviews)</span>
-                </li>
-            {% endfor %}
-        </ul>
+    <ul>
+        {% for igrica in igre %}
+    {% if igrica.pk %}
+        <li>
+            <strong><a href="{% url 'main:detail' igrica.pk %}">{{ igrica.name }}</a></strong>
+            {% if igrica.cover and igrica.cover.url %}
+                <br>
+            {% endif %}
+        </li>
     {% else %}
-        <p>No games found.</p>
+        <li>No PK available for {{ igrica.name }}</li>
     {% endif %}
+{% endfor %}
+
+    </ul>
+{% else %}
+    <p>No games found.</p>
+{% endif %}
+
+
 </div>
 {% endblock %}
+
+<script>
+    document.getElementById("search-form").addEventListener("submit", function(event) {
+        event.preventDefault();  // Sprečava normalno slanje forme
+
+        const name = document.getElementById("name").value;
+
+        // Kreiranje URL-a za pretragu sa parametrima
+        const url = `/search/?name=${name}`;
+
+        // Slanje GET zahteva putem AJAX-a
+        fetch(url)
+            .then(response => response.json())  // Pretvaranje odgovora u JSON
+            .then(data => {
+                const searchResultsDiv = document.getElementById("search-results");
+                searchResultsDiv.innerHTML = "";  // Brisanje prethodnih rezultata
+
+                if (data.data && data.data.length > 0) {
+                    data.data.forEach(game => {
+                        const gameElement = document.createElement("div");
+                        gameElement.classList.add("game");
+                        gameElement.innerHTML = `
+                            <h3>${game.name}</h3>
+                            <p>Rating: ${game.rating}</p>
+                            <p>Release Date: ${new Date(game.first_release_date * 1000).toLocaleDateString()}</p>
+                            <img src="${game.cover.url}" alt="${game.name}" />
+                        `;
+                        searchResultsDiv.appendChild(gameElement);
+                    });
+                } else {
+                    searchResultsDiv.innerHTML = "<p>No results found.</p>";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
+
