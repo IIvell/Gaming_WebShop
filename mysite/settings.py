@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'register.apps.RegisterConfig',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'forum'
 ]
 
 MIDDLEWARE = [

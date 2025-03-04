@@ -1,0 +1,92 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #121212; /* Dark background */
+        color: #ffffff; /* White text */
+        font-family: Arial, sans-serif;
+        background-image: url('https://img.freepik.com/free-photo/3d-rendering-hexagonal-texture-background_23-2150796421.jpg?t=st=1741091340~exp=1741094940~hmac=09a8cfe5819998dbd4c2985e02a9c5989684429bab8b877f693a5f1d5a4c08c1&w=1380');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        margin: 0;
+        padding: 0;
+    }
+
+    .forum-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .post-box {
+        background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px;
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+        width: 90%; /* Make posts almost full screen */
+        max-width: 900px; /* Add a max-width to prevent stretching too much on large screens */
+        text-align: left;
+    }
+
+    h2 {
+        color: #f1c40f; /* Gold title */
+    }
+
+    .post-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #FFD700;
+    }
+
+    .post-content {
+        color: #cccccc; /* Light gray text */
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    .post-footer {
+        color: #cccccc;
+        font-size: 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-create-post {
+        background-color: #1e88e5; /* Blue button */
+        color: white;
+        padding: 12px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+        font-size: 16px;
+        font-weight: bold;
+        margin: 20px;
+    }
+
+    .btn-create-post:hover {
+        background-color: #1565c0;
+    }
+</style>
+
+    <div class="forum-container">
+        <div class="post-box">
+            <h2>Edit Post</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Save Changes</button>
+            </form>
+            <a href="{% url 'forum:post_detail' post.id %}">Cancel</a>
+        </div>
+    </div>
+
+    
+{% endblock %}
