@@ -29,7 +29,7 @@ class IgricaListView(ListView):
         order = self.request.GET.get('order', 'rating_desc').strip()
 
         # Početni upit
-        base_query = "fields id, name, rating, first_release_date, rating_count, cover.image_id; "
+        base_query = "fields id, name, first_release_date, rating_count, cover.image_id; "
         filters = "where rating_count > 100 & version_parent = null; "
 
         # Sortiranje u API-ju
@@ -92,12 +92,23 @@ class IgricaDetailView(DetailView):
             "Accept": "application/json"
         }
         
-        data = f"fields id, name, rating, cover.image_id, summary; where id = {self.kwargs.get('pk')};"    
+        data = f"fields id, name, first_release_date, rating, rating_count, aggregated_rating, aggregated_rating_count, cover.image_id, summary; where id = {self.kwargs.get('pk')};"    
         response = requests.post(url, headers=headers, data=data)
         
         if response.status_code == 200 and response.json():
             game = response.json()[0]
             
+            # Konverzija first_release_date u čitljiv format
+            if "first_release_date" in game:
+                game["first_release_date"] = datetime.fromtimestamp(game["first_release_date"]).strftime('%d. %m. %Y.')
+
+            # Zaokruživanje rating-a na cijeli broj
+            if "rating" in game:
+                game["rating"] = f"{round(game["rating"] / 10, 1)}"
+
+            if "aggregated_rating" in game:
+                game["aggregated_rating"] = f"{round(game["aggregated_rating"] / 10, 1)}"    
+
             # Dodavanje URL-a za sliku
             if "cover" in game and "image_id" in game["cover"]:
                 game["cover"]["url"] = f"https://images.igdb.com/igdb/image/upload/t_cover_big/{game['cover']['image_id']}.jpg"
